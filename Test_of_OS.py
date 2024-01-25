@@ -1,7 +1,7 @@
-'''This is a test of the os library and what it can do'''
+"""This is a test of the os library and what it can do"""
 
 import csv
-import os
+import Test_of_OS
 
 folder = 'csv_files'
 
