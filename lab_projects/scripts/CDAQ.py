@@ -24,4 +24,5 @@ class cDAQController:
 if __name__ == "__main__":
     cdaq = cDAQController("cDAQ1Mod1")  # Replace with your device/module name
     data = cdaq.read_analog_input("ai0", 1000, 1000)  # Read from channel ai0, 1000 samples, at 1000 Hz
+    digital_data = cdaq.read_digital_input("port0/line0", 1000, 1000)
     print("Analog Input Data:", data)
