@@ -14,7 +14,11 @@ class cDAQController:
 
             data = task.read(number_of_samples_per_channel=samples_per_channel)
             return data
-
+    def read_digital_input(self, channel, samples_per_channel, sample_rare):
+            task.di_channels.add_di_chan(f"{self.device_name}/{channel}")
+            task.timing.cfg_samp_clk_timing(sample_rate, sample_quantity_mode=AcquisitionType.FINITE,
+                                            samps_per_chan=samples_per_channel)
+            
 
 # Example usage
 if __name__ == "__main__":
