@@ -7,6 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+paramiko = "^3.4.0"
+pyvisa = "^1.14.1"
+pyvisa-py = "^0.7.2"
+pyusb = "^1.2.1"
 
 
 [build-system]
