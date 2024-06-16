@@ -4,6 +4,10 @@ class EAPSB9000Controller:
     def __init__(self, resource_name):
         self.rm = pyvisa.ResourceManager()
         self.instr = self.rm.open_resource(resource_name)
+    
+    # Add a IDN query to check if the instrument is connected
+    def check_connection(self):
+        return self.query("*IDN?")
 
     def close(self):
         self.instr.close()
