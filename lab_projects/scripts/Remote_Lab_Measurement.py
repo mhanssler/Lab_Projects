@@ -1,15 +1,15 @@
 import paramiko
-import time
 import logging
-import Power_Supply_Control
 import os
 
-
-"""
-This script is used to control the lab equipment for the measurement. Using SSH to control the power supply and the oscilloscope, and the load"""
+import Power_Supply_Control
+import time
 
 paramiko.util.log_to_file("paramiko.log")
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG,
+                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                     handlers=[logging.StreamHandler()])
+
 
 def connect_to_ssh(ip_address, username, private_key_path):
     ssh_client = paramiko.SSHClient()
@@ -25,42 +25,67 @@ def connect_to_ssh(ip_address, username, private_key_path):
         print("Authentication failed, please verify your credentials")
         return None
     except paramiko.SSHException as e:
-        print(f"An error occurred: {e}")
+        print(f"An SSH error occurred: {e}")
         return None
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
     return ssh_client
 
-def disconnect_from_ssh(ssh_client):
-    ssh_client.close()
+def execute_command(ssh_client, command):
+    stdin, stdout, stderr = ssh_client.exec_command(command)
+    stdout.channel.recv_exit_status()  # Wait for the command to complete
+    output = stdout.read().decode()
+    error = stderr.read().decode()
+    return output, error
 
 def main():
-    # Connect to the SSH server
     print("Connecting to Morgan Lab Pi")
-    path = os.path.exists(r"C:\Users\mhans\SSH\id_rsa.txt")
-    print(path)
     private_key_path = r"C:\Users\mhans\SSH\id_rsa.txt"
-    ssh_client = connect_to_ssh("192.168.86.32", "morgan", private_key_path )
-    
+    ssh_client = connect_to_ssh("192.168.86.32", "morgan", private_key_path)
+
     if ssh_client:
         print("Connected to Morgan Lab Pi")
+        virtual_environment = "/myenv/bin/activate"
+        home = "/home/morgan/Lab_Projects"
+        # Commands to navigate to the repository, activate the virtual environment, and perform git pull
+        commands = [
+            "cd /home/morgan/myenv/bin"
+            "source activate",
+            
+            f"cd {home}",  # Ensure this path is correct
+          
+            "git pull origin main"
+        ]
+        print(commands)
+        for command in commands:
+            time.sleep(5)
+            output, error = execute_command(ssh_client, command)
+            if output:
+                print(f"Output: {output}")
+            if error:
+                print(f"Error: {error}")
+        
+        # Example of power supply control usage
+        try:
+            
+            
+
+            psu = Power_Supply_Control.EAPSB9000Controller("USB0::0x1AB1::0x0E11::DP8C172602885::INSTR")
+          
+            device_connected = psu.check_connection()
+            if device_connected:
+                print("Power Supply connected")
+                read_vi = psu.get_voltage()
+                print(read_vi)
+            else:
+                print("Power Supply not connected")
+        except Exception as e:
+            print(f"An error occurred while initializing the power supply controller: {e}")
+
+        ssh_client.close()
     else:
         print("Failed to connect to Morgan Lab Pi")
-        return
-    psu = Power_Supply_Control.EAPSB9000Controller("USB0::0x1AB1::0x0E11::DP8A204800001::INSTR")
-    # Create a power supply controller
-    device_connected = psu.check_connection()
-    if device_connected:
-        print("Power Supply connected")
-    else:
-        print("Power Supply not connected")
-    
-    read_vi = psu.get_voltage()
-    print(read_vi)
 
-    # Create an oscilloscope controller
-    #oscilloscope = RigolScopeController("USB0::0x1AB1::0x0588::DS1ET153818956::INSTR")
 if __name__ == "__main__":
     main()
-
