@@ -32,8 +32,8 @@ def main():
 
     # Example: connect to a device (replace with actual address)
     power_supply = 'USB0::0x1AB1::0x0E11::DP8C172602885::INSTR'
-    Load = 'USB0::0x1AB1::0x0E11::DL3A222000386::INSTR'
-    O_scope = 'USB0::0x1AB1::0x0588::DS1ET153818956::INSTR'
+    #Load = 'USB0::0x1AB1::0x0E11::DL3A222000386::INSTR'
+    #O_scope = 'USB0::0x1AB1::0x0588::DS1ET153818956::INSTR'
 
     instrument = connect_device(power_supply)
     ps_set_voltage(instrument, voltage, channel)
