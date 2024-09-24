@@ -46,3 +46,14 @@ for device in devices:
 
         # Read the response (size depends on expected response length)
         response = ep_in.read(64, timeout=5000)  # Adjust size and timeout as needed
+        print(f"Response from {device['name']}: {''.join([chr(x) for x in response])}")
+
+    except usb.core.USBError as e:
+        if e.errno == 110:  # Timeout error
+            print(f"Error communicating with {device['name']}: Operation timed out.")
+        elif e.errno == 16:  # Resource busy error
+            print(f"Error communicating with {device['name']}: Resource busy.")
+        else:
+            print(f"Unexpected USB error with {device['name']}: {e}")
+    except Exception as e:
+        print(f"General error with {device['name']}: {e}")
