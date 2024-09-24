@@ -1,4 +1,5 @@
 import pyvisa
+import asyncio
 
 def list_devices():
     rm = pyvisa.ResourceManager()
@@ -30,6 +31,17 @@ def connect_device(address):
         print(f"Error connecting to device at {address}: {e}")
         rm.close()
         return None, None
+
+def close_asyncio_event_loop():
+    """Forcefully closes the asyncio event loop to avoid lingering event loop errors."""
+    loop = asyncio.get_event_loop()
+    try:
+        if not loop.is_closed():
+            loop.run_until_complete(loop.shutdown_asyncgens())
+            loop.stop()
+            loop.close()
+    except Exception as e:
+        print(f"Error closing asyncio loop: {e}")
 
 def main():
     devices = list_devices()
@@ -79,6 +91,9 @@ def main():
         if rm:
             rm.close()
             print("Resource manager closed.")
+
+        # Forcefully close the asyncio loop to avoid lingering errors
+        close_asyncio_event_loop()
 
 if __name__ == "__main__":
     main()
