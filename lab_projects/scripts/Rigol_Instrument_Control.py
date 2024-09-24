@@ -1,10 +1,13 @@
 import pyvisa
 
 def list_devices():
-    with pyvisa.ResourceManager() as rm:
+    rm = pyvisa.ResourceManager()
+    try:
         devices = rm.list_resources()
         print("Connected devices:", devices)  # For debugging
         return devices
+    finally:
+        rm.close()  # Explicitly close the ResourceManager
 
 def ps_set_voltage(instrument, voltage, channel):
     voltage = str(voltage)  # Convert voltage to string if it's numeric
