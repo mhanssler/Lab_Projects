@@ -1,4 +1,4 @@
-import pyvisa
+import pyvisa #type ignore
 
 class EAPSB9000Controller:
     def __init__(self, resource_name):
@@ -38,7 +38,8 @@ class EAPSB9000Controller:
 # Example usage
 if __name__ == "__main__":
     # Replace with your instrument's address
-    psu = EAPSB9000Controller('GPIB0::5::INSTR')
+    psu = EAPSB9000Controller('USB6::5::INSTR')
+    psu.list_resources()
     psu.set_voltage(5.0)
     print("Voltage set to 5.0 V")
     print(f"Current Voltage: {psu.get_voltage()} V")
