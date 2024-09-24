@@ -88,8 +88,8 @@ def main():
         # Set voltage
         ps_set_voltage(instrument, voltage, channel)
         # Read voltage
-        read_voltage(instrument, channel)
-
+        set_votlage = read_voltage(instrument, channel)
+        print(f"Voltage: {set_votlage}")
         # Send a simple SCPI command to test communication
         instrument.write('*IDN?')
         response = instrument.read()
