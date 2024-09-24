@@ -32,12 +32,25 @@ def main():
     if not devices:
         print("No devices found. Please check connections and try again.")
         return
+    
+    # Display connected devices for user selection
+    for index, device in enumerate(devices):
+        print(f"{index + 1}: {device}")
+
+    try:
+        device_choice = int(input("Select the device number for the power supply: ")) - 1
+        if device_choice < 0 or device_choice >= len(devices):
+            print("Invalid selection. Exiting.")
+            return
+    except ValueError:
+        print("Invalid input. Please enter a number corresponding to the device.")
+        return
+
+    # Get selected device address
+    power_supply = devices[device_choice]
 
     voltage = input("Please Enter the Voltage for the Power Supply (0-30): ")
     channel = input("Please Enter the Channel for the Power Supply (1, 2): ")
-
-    # Replace with actual address of your power supply
-    power_supply = 'USB0::1ab1::0e11::DP8C172602885::0::INSTR'  # Updated to match your listed devices
 
     instrument = connect_device(power_supply)
     if instrument is None:
