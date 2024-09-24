@@ -1,5 +1,6 @@
 import pyvisa
 import asyncio
+import time
 
 def list_devices():
     rm = pyvisa.ResourceManager()
@@ -89,11 +90,14 @@ def main():
         ps_set_voltage(instrument, voltage, channel)
         # Read voltage
         set_votlage = read_voltage(instrument, channel)
-        print(f"Voltage: {set_votlage}")
+        
         # Send a simple SCPI command to test communication
         instrument.write('*IDN?')
         response = instrument.read()
         print("Instrument ID:", response)
+        while True:
+            print(f"Voltage: {set_votlage}")
+            time.sleep(1)
     except Exception as e:
         print("Error during instrument operation:", e)
     finally:
