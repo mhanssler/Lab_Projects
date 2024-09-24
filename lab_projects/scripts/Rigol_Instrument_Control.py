@@ -20,6 +20,17 @@ def ps_set_voltage(instrument, voltage, channel):
     except Exception as e:
         print("Error sending command:", e)
 
+def read_voltage(instrument, channel):
+    scpi_command = f":MEASure:VOLTage:DC? CH{channel}"
+    print("Sending SCPI command:", scpi_command)  # For debugging
+
+    try:
+        instrument.write(scpi_command)
+        response = instrument.read()
+        print("Voltage reading:", response)
+    except Exception as e:
+        print("Error sending command:", e)
+
 def connect_device(address):
     rm = pyvisa.ResourceManager()
     try:
@@ -76,6 +87,8 @@ def main():
     try:
         # Set voltage
         ps_set_voltage(instrument, voltage, channel)
+        # Read voltage
+        read_voltage(instrument, channel)
 
         # Send a simple SCPI command to test communication
         instrument.write('*IDN?')
