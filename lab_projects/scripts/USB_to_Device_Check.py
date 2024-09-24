@@ -18,31 +18,31 @@ for device in devices:
 
         print(f"Connected to {device['name']}.")
 
-        # Set the active configuration (usually needed for USBTMC devices)
+        # Set the active configuration
         dev.set_configuration()
 
-        # Find the OUT and IN endpoints (adjust based on your device's configuration)
+        # Access the first configuration and first interface
         cfg = dev.get_active_configuration()
         intf = cfg[(0, 0)]
 
-        # OUT endpoint is usually EP1 OUT (endpoint address 0x01)
+        # Find OUT (to send commands) and IN (to receive responses) endpoints
         ep_out = usb.util.find_descriptor(
             intf,
             custom_match=lambda e: usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_OUT
         )
 
-        # IN endpoint is usually EP1 IN (endpoint address 0x81)
         ep_in = usb.util.find_descriptor(
             intf,
             custom_match=lambda e: usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_IN
         )
 
+        # Check that endpoints are correctly identified
+        if not ep_out or not ep_in:
+            print(f"Could not identify endpoints for {device['name']}.")
+            continue
+
         # Send the command to identify the device
         ep_out.write(b'*IDN?')
 
         # Read the response (size depends on expected response length)
-        response = ep_in.read(64)# Adjust size as needed
-        print(f"Response from {device['name']}: {''.join([chr(x) for x in response])}")
-
-    except Exception as e:
-        print(f"Error communicating with {device['name']}: {e}")
+        response = ep_in.read(64, timeout=5000)  # Adjust size and timeout as needed
