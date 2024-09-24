@@ -37,7 +37,7 @@ def main():
     channel = input("Please Enter the Channel for the Power Supply (1, 2): ")
 
     # Replace with actual address of your power supply
-    power_supply = 'USB0::6833::3601::DP8C172602885::0::INSTR'  # Updated to match your listed devices
+    power_supply = 'USB0::1ab1::0e11::DP8C172602885::0::INSTR'  # Updated to match your listed devices
 
     instrument = connect_device(power_supply)
     if instrument is None:
