@@ -89,9 +89,11 @@ def main():
         # Set voltage
         ps_set_voltage(instrument, voltage, channel)
         # Read voltage
+        time.sleep(5)  # Wait for the power supply to stabilize
+
         read_voltage(instrument, channel)
         #print the voltage reading
-        
+
         
         # Send a simple SCPI command to test communication
         instrument.write('*IDN?')
