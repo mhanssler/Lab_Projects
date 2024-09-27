@@ -4,6 +4,9 @@ Date: 09.27.24"""
 import logging
 import pyvisa
 
+import logging
+import pyvisa
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
