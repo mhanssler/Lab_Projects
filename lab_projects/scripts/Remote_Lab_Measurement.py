@@ -2,13 +2,20 @@ import paramiko
 import logging
 import os
 
-import Power_Supply_Control
+import DP832_Power_supply as Power_Supply_Control # type: ignore
 import time
 
 paramiko.util.log_to_file("paramiko.log")
 logging.basicConfig(level=logging.DEBUG,
                      format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      handlers=[logging.StreamHandler()])
+
+def list_connection_to_internet():
+    try:
+        os.system("nmcli connection show")
+    except Exception as e:
+        print("Error listing devices:", e)
+        return []
 
 
 def connect_to_ssh(ip_address, username, private_key_path):
@@ -68,9 +75,6 @@ def main():
         
         # Example of power supply control usage
         try:
-            
-            
-
             psu = Power_Supply_Control.EAPSB9000Controller("USB0::0x1AB1::0x0E11::DP8C172602885::INSTR")
           
             device_connected = psu.check_connection()
