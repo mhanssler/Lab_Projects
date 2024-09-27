@@ -2,10 +2,16 @@
 
 import usb.core
 import usb.util
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    handlers=[logging.StreamHandler()])
 
 # Find USB devices
 devices = usb.core.find(find_all=True)
 
 # Loop through devices and print information
 for device in devices:
-    print(f'Device: {device}')
+    logging.info(f'Device: {device}')
