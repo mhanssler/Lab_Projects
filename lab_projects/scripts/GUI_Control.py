@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel
 import pyqtgraph as pg
 
 class MainWindow(QMainWindow):
@@ -20,7 +20,15 @@ class MainWindow(QMainWindow):
         # Buttons for device control
         self.buttonControlDP832 = QPushButton('Control DP832')
         layout.addWidget(self.buttonControlDP832)
-        # Connect this button to a function to control DP832
+        
+        #Add a display to read the channel, voltage and current
+        self.channelDisplay = QLabel('Channel: ')
+        layout.addWidget(self.channelDisplay)
+        self.voltageDisplay = QLabel('Voltage: ')
+        layout.addWidget(self.voltageDisplay)
+        self.currentDisplay = QLabel('Current: ')
+        layout.addWidget(self.currentDisplay)
+
 
         # ... Add more buttons and controls for other devices
 
